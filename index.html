@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global Brand Design Agencies</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #1e1e1e;
+      --text-primary: #f0f0f0;
+      --text-secondary: #888;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 clamp(16px, 4vw, 48px);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .site-title {
+      font-size: clamp(13px, 1.4vw, 16px);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .header-right { display: flex; align-items: center; gap: 12px; }
+
+    .agency-count { font-size: 12px; color: var(--text-secondary); letter-spacing: 0.06em; }
+
+    .search-wrap { position: relative; }
+    .search-wrap input {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-size: 13px;
+      padding: 7px 12px 7px 32px;
+      width: clamp(140px, 18vw, 220px);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-wrap input:focus { border-color: #444; }
+    .search-wrap input::placeholder { color: var(--text-secondary); }
+    .search-icon {
+      position: absolute; left: 10px; top: 50%;
+      transform: translateY(-50%); opacity: 0.4; pointer-events: none;
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      padding: 14px clamp(16px, 4vw, 48px);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .filter-label {
+      font-size: 11px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-secondary); margin-right: 4px;
+    }
+
+    .chip {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 12px;
+      padding: 5px 14px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .chip:hover { border-color: #555; color: var(--text-primary); }
+    .chip.active { background: var(--text-primary); border-color: var(--text-primary); color: #000; }
+
+    .chip-fav { border-color: rgba(255,45,85,0.35); color: rgba(255,45,85,0.7); }
+    .chip-fav:hover { border-color: rgba(255,45,85,0.7); color: #ff2d55; }
+    .chip-fav.active { background: #ff2d55; border-color: #ff2d55; color: #fff; }
+    .fav-count { font-size: 10px; opacity: 0.8; }
+
+    /* ── GRID ── */
+    main { padding: clamp(16px, 3vw, 40px) clamp(16px, 4vw, 48px); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+      gap: clamp(8px, 1.5vw, 16px);
+    }
+
+    /* ── CARD ── */
+    .card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: #2e2e2e;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+    }
+    .card:hover .visit-btn { opacity: 1; transform: translateY(0); }
+    .card:hover .clients-bar { opacity: 1; transform: translateY(0); }
+
+    /* thumbnail area */
+    .card-thumb {
+      position: relative;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 24px 48px;
+      overflow: hidden;
+    }
+
+    .logo-text {
+      font-size: clamp(16px, 2.8vw, 26px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-align: center;
+      line-height: 1.1;
+      transition: transform 0.3s ease;
+      word-break: break-word;
+      position: relative;
+      z-index: 1;
+    }
+    .card:hover .logo-text { transform: scale(1.05); }
+
+    /* like button */
+    .like-btn {
+      position: absolute;
+      top: 10px; left: 10px;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      z-index: 3;
+      transition: transform 0.15s ease, background 0.2s, border-color 0.2s;
+      opacity: 0;
+    }
+    .card:hover .like-btn { opacity: 1; }
+    .like-btn.liked { opacity: 1; background: rgba(255,45,85,0.18); border-color: rgba(255,45,85,0.5); }
+    .like-btn:hover { transform: scale(1.15); }
+    .like-btn:active { transform: scale(0.9); }
+
+    .like-btn svg { width: 15px; height: 15px; transition: all 0.15s; }
+    .like-btn .heart-outline { display: block; }
+    .like-btn .heart-fill   { display: none; }
+    .like-btn.liked .heart-outline { display: none; }
+    .like-btn.liked .heart-fill   { display: block; }
+
+    /* visit overlay */
+    .visit-btn {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 100px;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 2;
+    }
+
+    /* clients bar — sits at bottom of thumb */
+    .clients-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 10px 12px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0) 100%);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      z-index: 2;
+    }
+
+    .client-tag {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      padding: 3px 9px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.9);
+      white-space: nowrap;
+      backdrop-filter: blur(4px);
+    }
+
+    /* card info */
+    .card-info {
+      padding: 11px 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .card-name { font-size: 13px; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
+    .card-meta { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+    .card-rank {
+      font-size: 10px; color: var(--text-secondary);
+      background: var(--border); border-radius: 4px;
+      padding: 2px 6px; white-space: nowrap; flex-shrink: 0;
+    }
+
+    .card.hidden { display: none; }
+
+    .empty {
+      display: none; text-align: center;
+      padding: 80px 20px; color: var(--text-secondary);
+      font-size: 14px; grid-column: 1 / -1;
+    }
+    .empty.show { display: block; }
+
+    footer {
+      text-align: center; padding: 40px 20px;
+      font-size: 12px; color: var(--text-secondary);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 480px) {
+      header { height: 56px; }
+      .agency-count { display: none; }
+      .search-wrap input { width: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="site-title">Brand Design Agencies</div>
+  <div class="header-right">
+    <span class="agency-count" id="countLabel"></span>
+    <div class="search-wrap">
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Search agencies…" />
+    </div>
+  </div>
+</header>
+
+<div class="filter-bar">
+  <span class="filter-label">Region</span>
+  <button class="chip active" data-filter="all">All</button>
+  <button class="chip" data-filter="us">Americas</button>
+  <button class="chip" data-filter="uk">Europe</button>
+  <button class="chip" data-filter="global">Global</button>
+  <button class="chip" data-filter="asia">Asia</button>
+  <button class="chip" data-filter="kr">Korea</button>
+  <button class="chip" data-filter="jp">Japan</button>
+  <button class="chip chip-fav" data-filter="fav" id="favChip">♥ 즐겨찾기 <span class="fav-count" id="favCount"></span></button>
+</div>
+
+<main>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="emptyState">No agencies found.</div>
+</main>
+
+<footer>Global Brand Design Agencies · 총 80개 에이전시 · 카드를 클릭하면 공식 사이트로 이동합니다</footer>
+
+<script>
+const agencies = [
+  // ── GLOBAL ──
+  {
+    name:"Pentagram", location:"New York / London / Berlin / Austin", region:"global",
+    url:"https://www.pentagram.com", rank:"#1", bg:"#141414", color:"#fff",
+    specialty:"Brand Identity · Design",
+    logo:"PENTAGRAM",
+    clients:["Nike","Rolls-Royce","Saks Fifth Avenue"]
+  },
+  {
+    name:"Landor & Fitch", location:"San Francisco / London / Sydney", region:"global",
+    url:"https://www.landor.com", rank:"#2", bg:"#0d0d0d", color:"#e8c14b",
+    specialty:"Brand Strategy · Identity",
+    logo:"Landor & Fitch",
+    clients:["FedEx","Kellogg's","Barclays"]
+  },
+  {
+    name:"Wolff Olins", location:"London / New York", region:"uk",
+    url:"https://www.wolffolins.com", rank:"#3", bg:"#111", color:"#ff4d00",
+    specialty:"Brand Transformation",
+    logo:"Wolff Olins",
+    clients:["Uber","GE","Tate Modern"]
+  },
+  {
+    name:"Interbrand", location:"New York / London / Tokyo / Seoul", region:"global",
+    url:"https://interbrand.com", rank:"#4", bg:"#0f0f0f", color:"#fff",
+    specialty:"Brand Valuation · Strategy",
+    logo:"Interbrand",
+    clients:["Apple","Samsung","Toyota"]
+  },
+  {
+    name:"Lippincott", location:"New York / London / Seoul", region:"global",
+    url:"https://lippincott.com", rank:"#5", bg:"#111", color:"#c8f464",
+    specialty:"Brand Consulting",
+    logo:"Lippincott",
+    clients:["Hyundai","Starbucks","Sprint"]
+  },
+  {
+    name:"FutureBrand", location:"London / New York / Buenos Aires", region:"global",
+    url:"https://www.futurebrand.com", rank:"#6", bg:"#0a0a0a", color:"#6eb5ff",
+    specialty:"Brand Experience",
+    logo:"FutureBrand",
+    clients:["Havaianas","Mastercard","Air France"]
+  },
+  {
+    name:"Siegel+Gale", location:"New York / London / Los Angeles", region:"global",
+    url:"https://www.siegelgale.com", rank:"#7", bg:"#111", color:"#f4c842",
+    specialty:"Brand Simplicity",
+    logo:"Siegel+Gale",
+    clients:["American Airlines","Marriott","United Nations"]
+  },
+  {
+    name:"JKR", location:"London / New York / Singapore", region:"global",
+    url:"https://jkrglobal.com", rank:"#8", bg:"#0d0d0d", color:"#ff3c5f",
+    specialty:"Packaging · Brand Identity",
+    logo:"JKR",
+    clients:["Heinz","Coca-Cola","Amazon Fresh"]
+  },
+  {
+    name:"DesignStudio", location:"London / New York / Melbourne", region:"uk",
+    url:"https://design.studio", rank:"#9", bg:"#111", color:"#fff",
+    specialty:"Brand Identity · Digital",
+    logo:"Design Studio",
+    clients:["Airbnb","Premier League","Deliveroo"]
+  },
+  {
+    name:"Turner Duckworth", location:"London / San Francisco", region:"uk",
+    url:"https://www.turnerduckworth.com", rank:"#10", bg:"#0f0f0f", color:"#ff6b35",
+    specialty:"Packaging · Brand Design",
+    logo:"Turner\nDuckworth",
+    clients:["Coca-Cola","Amazon","Metallica"]
+  },
+  {
+    name:"Moving Brands", location:"London / New York / San Francisco", region:"uk",
+    url:"https://www.movingbrands.com", rank:"#11", bg:"#0a0a0a", color:"#64d8ff",
+    specialty:"Brand Motion · Digital",
+    logo:"Moving Brands",
+    clients:["BBC","HP","Swisscom"]
+  },
+  {
+    name:"Superunion", location:"London / New York / Dubai", region:"uk",
+    url:"https://superunion.com", rank:"#12", bg:"#111", color:"#ff5733",
+    specialty:"Brand Identity · Strategy",
+    logo:"Superunion",
+    clients:["Shell","WPP","Smurfit Kappa"]
+  },
+  {
+    name:"Koto", location:"London / New York / Berlin", region:"uk",
+    url:"https://koto.studio", rank:"#13", bg:"#0d0d0d", color:"#b8ff5e",
+    specialty:"Brand Identity · Digital",
+    logo:"KOTO",
+    clients:["Cash App","Yoto","Penfold"]
+  },
+  {
+    name:"Gretel", location:"New York", region:"us",
+    url:"https://gretelny.com", rank:"#14", bg:"#0f0f0f", color:"#fff",
+    specialty:"Motion · Brand Identity",
+    logo:"Gretel",
+    clients:["Netflix","HBO","Hulu"]
+  },
+  {
+    name:"DixonBaxi", location:"London", region:"uk",
+    url:"https://dixonbaxi.com", rank:"#15", bg:"#111", color:"#ff2d55",
+    specialty:"Brand Expression · Media",
+    logo:"DixonBaxi",
+    clients:["Sky","Channel 4","Eurosport"]
+  },
+  {
+    name:"Chermayeff & Geismar & Haviv", location:"New York", region:"us",
+    url:"https://www.cghnyc.com", rank:"#16", bg:"#0a0a0a", color:"#e8c14b",
+    specialty:"Logo · Brand Identity",
+    logo:"CGH",
+    clients:["NBC","Chase","Showtime"]
+  },
+  {
+    name:"Prophet", location:"San Francisco / New York / Chicago", region:"us",
+    url:"https://www.prophet.com", rank:"#17", bg:"#0d0d0d", color:"#4df0c8",
+    specialty:"Brand Growth Strategy",
+    logo:"Prophet",
+    clients:["T-Mobile","Electrolux","AARP"]
+  },
+  {
+    name:"R/GA", location:"New York / London / São Paulo", region:"global",
+    url:"https://www.rga.com", rank:"#18", bg:"#111", color:"#5eabff",
+    specialty:"Digital Brand · Innovation",
+    logo:"R/GA",
+    clients:["Nike","Beats by Dre","Samsung"]
+  },
+  {
+    name:"Sagmeister & Walsh", location:"New York", region:"us",
+    url:"https://sagmeisterwalsh.com", rank:"#19", bg:"#0f0f0f", color:"#ff5f85",
+    specialty:"Graphic Design · Art Direction",
+    logo:"S&W",
+    clients:["Jay-Z","Levi's","The New York Times"]
+  },
+  {
+    name:"Base Design", location:"Brussels / New York / Geneva", region:"uk",
+    url:"https://basedesign.com", rank:"#20", bg:"#0a0a0a", color:"#fff",
+    specialty:"Brand Identity · Typography",
+    logo:"Base",
+    clients:["Frieze","MoMA PS1","Neue Galerie"]
+  },
+  {
+    name:"Ragged Edge", location:"London", region:"uk",
+    url:"https://raggededge.com", rank:"#21", bg:"#111", color:"#ffdd00",
+    specialty:"Brand Strategy · Identity",
+    logo:"Ragged Edge",
+    clients:["Bloom & Wild","Hims","Patch"]
+  },
+  {
+    name:"Mucho", location:"Barcelona / San Francisco / Paris", region:"uk",
+    url:"https://mucho.com", rank:"#22", bg:"#0d0d0d", color:"#ff9f1c",
+    specialty:"Brand Identity · Culture",
+    logo:"Mucho",
+    clients:["Warner Music","Desigual","Neinver"]
+  },
+  {
+    name:"Huge", location:"New York / Atlanta / London", region:"us",
+    url:"https://www.hugeinc.com", rank:"#23", bg:"#0f0f0f", color:"#fff",
+    specialty:"Digital Experience · Brand",
+    logo:"HUGE",
+    clients:["JetBlue","Delta","Google"]
+  },
+  {
+    name:"Wieden+Kennedy", location:"Portland / New York / London / Tokyo", region:"global",
+    url:"https://www.wk.com", rank:"#24", bg:"#111", color:"#ff3200",
+    specialty:"Brand Advertising · Campaigns",
+    logo:"W+K",
+    clients:["Nike","Old Spice","Coca-Cola"]
+  },
+  {
+    name:"North", location:"London", region:"uk",
+    url:"https://north.design", rank:"#25", bg:"#0a0a0a", color:"#b4f5e7",
+    specialty:"Brand Identity · Art Direction",
+    logo:"North",
+    clients:["London 2012","GE Healthcare","Reebok"]
+  },
+  {
+    name:"NB Studio", location:"London", region:"uk",
+    url:"https://www.nbstudio.co.uk", rank:"#26", bg:"#0d0d0d", color:"#c8ff57",
+    specialty:"Brand Identity · Print",
+    logo:"NB Studio",
+    clients:["BAFTA","Penguin","Royal Academy"]
+  },
+  {
+    name:"frog", location:"San Francisco / New York / Milan / Shanghai", region:"global",
+    url:"https://www.frog.co", rank:"#27", bg:"#111", color:"#5bff8f",
+    specialty:"Product Design · Brand",
+    logo:"frog",
+    clients:["GE","Disney","Ford"]
+  },
+  {
+    name:"Hatch", location:"Seattle", region:"us",
+    url:"https://www.hatch.co", rank:"#28", bg:"#0f0f0f", color:"#ff9a3c",
+    specialty:"Startup Brand Identity",
+    logo:"Hatch",
+    clients:["DoorDash","Redfin","PopSockets"]
+  },
+  {
+    name:"Saffron", location:"London / Madrid / Mumbai", region:"uk",
+    url:"https://www.saffron-consultants.com", rank:"#29", bg:"#0a0a0a", color:"#ff8c00",
+    specialty:"Brand & Culture",
+    logo:"Saffron",
+    clients:["Etihad Airways","S7 Airlines","Burger King"]
+  },
+  {
+    name:"Ueno", location:"New York / San Francisco / Reykjavík", region:"us",
+    url:"https://ueno.co", rank:"#30", bg:"#111", color:"#e8e8e8",
+    specialty:"Digital Product · Brand",
+    logo:"Ueno",
+    clients:["GitHub","Gusto","Dropbox"]
+  },
+  {
+    name:"Nonobject", location:"Palo Alto", region:"us",
+    url:"https://nonobject.com", rank:"#31", bg:"#0d0d0d", color:"#b5d8ff",
+    specialty:"Product Brand · Innovation",
+    logo:"NON\nOBJECT",
+    clients:["Beats","Lenovo","Microsoft"]
+  },
+  {
+    name:"Work & Co", location:"New York / Porto Alegre / Berlin", region:"us",
+    url:"https://work.co", rank:"#32", bg:"#111", color:"#fff",
+    specialty:"Digital Experience · Brand",
+    logo:"Work & Co",
+    clients:["IKEA","Apple TV+","Audi"]
+  },
+  {
+    name:"Franklyn", location:"New York", region:"us",
+    url:"https://franklyn.co", rank:"#33", bg:"#0f0f0f", color:"#ffd166",
+    specialty:"Brand Identity · Motion",
+    logo:"Franklyn",
+    clients:["Spotify","American Express","Equinox"]
+  },
+  {
+    name:"Probably Cool", location:"Sydney", region:"asia",
+    url:"https://probablycool.com", rank:"#34", bg:"#0a0a0a", color:"#c4ff72",
+    specialty:"Brand Identity · Culture",
+    logo:"Probably\nCool",
+    clients:["Bonds","CUB","Westpac"]
+  },
+  {
+    name:"IDEO", location:"San Francisco / London / New York", region:"us",
+    url:"https://www.ideo.com", rank:"#35", bg:"#111", color:"#ff5630",
+    specialty:"Design Thinking · Innovation",
+    logo:"IDEO",
+    clients:["Apple","Oral-B","Steelcase"]
+  },
+  {
+    name:"Tajima Creative", location:"Tokyo", region:"asia",
+    url:"https://tajimacreative.co.jp", rank:"#36", bg:"#0d0d0d", color:"#ffb3c1",
+    specialty:"Brand Identity · Japan",
+    logo:"Tajima",
+    clients:["Shiseido","Panasonic","Honda"]
+  },
+  {
+    name:"Nendo", location:"Tokyo", region:"asia",
+    url:"https://www.nendo.jp", rank:"#37", bg:"#0f0f0f", color:"#d4d4d4",
+    specialty:"Product · Brand Design",
+    logo:"nendo",
+    clients:["Issey Miyake","Cappellini","Nissin"]
+  },
+  {
+    name:"Hakuhodo", location:"Tokyo / Seoul / Singapore", region:"asia",
+    url:"https://www.hakuhodo.co.jp", rank:"#38", bg:"#0a0a0a", color:"#e8c14b",
+    specialty:"Brand Communication · Asia",
+    logo:"HAKUHODO",
+    clients:["Toyota","P&G","Canon"]
+  },
+  {
+    name:"Coat", location:"Amsterdam", region:"uk",
+    url:"https://coat.studio", rank:"#39", bg:"#111", color:"#aaffef",
+    specialty:"Brand Identity · Branding",
+    logo:"COAT",
+    clients:["Booking.com","Heineken","Philips"]
+  },
+  {
+    name:"Red Antler", location:"New York", region:"us",
+    url:"https://redantler.com", rank:"#40", bg:"#0d0d0d", color:"#ff3b3b",
+    specialty:"Startup Brand · Strategy",
+    logo:"Red Antler",
+    clients:["Casper","Hims","Allbirds"]
+  },
+
+  // ── KOREA ──
+  {
+    name:"601bisang", location:"Seoul", region:"kr",
+    url:"https://601bisang.com", rank:"KR #1", bg:"#0d0d0d", color:"#ff4040",
+    specialty:"Brand Identity · Editorial",
+    logo:"601bisang",
+    clients:["Amore Pacific","Seoul Arts Center","Sejong Center"]
+  },
+  {
+    name:"Ahn Graphics", location:"Seoul", region:"kr",
+    url:"https://ag.co.kr", rank:"KR #2", bg:"#111", color:"#ffffff",
+    specialty:"Brand · Typography · Publishing",
+    logo:"안그라픽스",
+    clients:["Naver","Seoul","Arts Council Korea"]
+  },
+  {
+    name:"Studio Fnt", location:"Seoul", region:"kr",
+    url:"https://fnt.kr", rank:"KR #3", bg:"#0a0a0a", color:"#d4ff4f",
+    specialty:"Brand Identity · Type Design",
+    logo:"Studio\nFnt",
+    clients:["Hyundai Card","Kakao","Seoul Museum"]
+  },
+  {
+    name:"Propaganda", location:"Seoul", region:"kr",
+    url:"https://propaganda.kr", rank:"KR #4", bg:"#111", color:"#ff6b35",
+    specialty:"Brand Strategy · Identity",
+    logo:"PROPAGANDA",
+    clients:["Aesop Korea","CJ","Lotte"]
+  },
+  {
+    name:"Ordinary People", location:"Seoul", region:"kr",
+    url:"https://ordinarypeople.kr", rank:"KR #5", bg:"#0d0d0d", color:"#e8e8e8",
+    specialty:"Brand · Editorial · Art Direction",
+    logo:"Ordinary\nPeople",
+    clients:["Gentle Monster","Tamburins","IISE"]
+  },
+  {
+    name:"Workroom Press", location:"Seoul", region:"kr",
+    url:"https://workroompress.kr", rank:"KR #6", bg:"#0f0f0f", color:"#a8d8ff",
+    specialty:"Brand · Publishing · Typography",
+    logo:"Workroom\nPress",
+    clients:["Arko","Kukje Gallery","Seoul Foundation"]
+  },
+  {
+    name:"MMMG", location:"Seoul", region:"kr",
+    url:"https://mmmg.net", rank:"KR #7", bg:"#111", color:"#c8ff72",
+    specialty:"Brand Identity · Product Design",
+    logo:"MMMG",
+    clients:["Life is a Journey","Comma","Millimeter"]
+  },
+  {
+    name:"Sulki and Min", location:"Seoul", region:"kr",
+    url:"https://sulkiandmin.com", rank:"KR #8", bg:"#0a0a0a", color:"#ffcf72",
+    specialty:"Graphic Design · Brand",
+    logo:"Sulki\nand Min",
+    clients:["Gwangju Biennale","Kukje Gallery","Arko"]
+  },
+  {
+    name:"Sandoll", location:"Seoul", region:"kr",
+    url:"https://sandoll.co.kr", rank:"KR #9", bg:"#0d0d0d", color:"#ff8fa3",
+    specialty:"Brand · Type Design · Fonts",
+    logo:"산돌",
+    clients:["Kakao","Naver","Samsung"]
+  },
+  {
+    name:"Studio Concrete", location:"Seoul", region:"kr",
+    url:"https://studioconcrete.kr", rank:"KR #10", bg:"#111", color:"#e8e8e8",
+    specialty:"Brand Identity · Spatial Design",
+    logo:"Studio\nConcrete",
+    clients:["Gentle Monster","Ader Error","Tamburins"]
+  },
+  {
+    name:"Zero per Zero", location:"Seoul", region:"kr",
+    url:"https://zeroperzerostudio.com", rank:"KR #11", bg:"#0f0f0f", color:"#80ffdb",
+    specialty:"Motion · Brand Identity",
+    logo:"Zero\nper Zero",
+    clients:["Kakao","Hyundai","LG"]
+  },
+  {
+    name:"SASA", location:"Seoul", region:"kr",
+    url:"https://sasa.kr", rank:"KR #12", bg:"#0a0a0a", color:"#ff9f1c",
+    specialty:"Brand Identity · Culture",
+    logo:"SASA",
+    clients:["Lotte","Samsung","Amore Pacific"]
+  },
+  {
+    name:"Bowyer Design", location:"Seoul", region:"kr",
+    url:"https://bowyer.kr", rank:"KR #13", bg:"#111", color:"#b5d8ff",
+    specialty:"Brand Identity · Digital",
+    logo:"BOWYER",
+    clients:["Coupang","Naver","Line"]
+  },
+  {
+    name:"Hezin O", location:"Seoul", region:"kr",
+    url:"https://hezin.com", rank:"KR #14", bg:"#0d0d0d", color:"#ffd6e0",
+    specialty:"Brand · Illustration · Editorial",
+    logo:"Hezin O",
+    clients:["Olive Young","Innisfree","Aesop"]
+  },
+  {
+    name:"Studio DASI", location:"Seoul", region:"kr",
+    url:"https://studiodasi.com", rank:"KR #15", bg:"#0f0f0f", color:"#72ffc5",
+    specialty:"Brand Identity · Product",
+    logo:"DASI",
+    clients:["LG","Samsung","SK"]
+  },
+  {
+    name:"Naver Creative Labs", location:"Seoul / Seongnam", region:"kr",
+    url:"https://clova.ai", rank:"KR #16", bg:"#0a0a0a", color:"#03c75a",
+    specialty:"Digital Brand · AI Experience",
+    logo:"NAVER",
+    clients:["Naver","Line","Papago"]
+  },
+  {
+    name:"Kakao Design", location:"Seoul / Jeju", region:"kr",
+    url:"https://kakao.com", rank:"KR #17", bg:"#111", color:"#ffcd00",
+    specialty:"Brand · Product · UX Design",
+    logo:"kakao",
+    clients:["KakaoTalk","Kakao Pay","Kakao Mobility"]
+  },
+  {
+    name:"Designsori", location:"Seoul", region:"kr",
+    url:"https://designsori.com", rank:"KR #18", bg:"#0d0d0d", color:"#ff6d6d",
+    specialty:"Brand Identity · Packaging",
+    logo:"Designsori",
+    clients:["CJ CheilJedang","Orion","Lotte Chilsung"]
+  },
+  {
+    name:"Corners", location:"Seoul", region:"kr",
+    url:"https://corners.studio", rank:"KR #19", bg:"#0f0f0f", color:"#e0e0e0",
+    specialty:"Brand Identity · Spatial",
+    logo:"Corners",
+    clients:["Hyundai","Kia","Genesis"]
+  },
+  {
+    name:"WRIK", location:"Seoul", region:"kr",
+    url:"https://wrik.kr", rank:"KR #20", bg:"#0a0a0a", color:"#c0b4ff",
+    specialty:"Brand Strategy · Identity",
+    logo:"WRIK",
+    clients:["Musinsa","Olive Young","Kurly"]
+  },
+
+  // ── JAPAN ──
+  {
+    name:"Nippon Design Center", location:"Tokyo", region:"jp",
+    url:"https://www.ndc.co.jp", rank:"JP #1", bg:"#0d0d0d", color:"#ffffff",
+    specialty:"Brand Identity · Poster Design",
+    logo:"NDC",
+    clients:["Honda","Issey Miyake","Shiseido"]
+  },
+  {
+    name:"Hara Design Institute", location:"Tokyo", region:"jp",
+    url:"https://www.ndc.co.jp/hara", rank:"JP #2", bg:"#111", color:"#f5f5f0",
+    specialty:"Brand · MUJI Aesthetic",
+    logo:"Hara\nDesign",
+    clients:["MUJI","Roppongi Hills","Mori Art Museum"]
+  },
+  {
+    name:"Groovisions", location:"Tokyo", region:"jp",
+    url:"https://groovisions.com", rank:"JP #3", bg:"#0f0f0f", color:"#ff5f5f",
+    specialty:"Brand · Motion · Music Visual",
+    logo:"grv",
+    clients:["Cornelius","Capsule","Perfume"]
+  },
+  {
+    name:"UMA / Design Farm", location:"Osaka", region:"jp",
+    url:"https://www.umakart.com", rank:"JP #4", bg:"#0a0a0a", color:"#ffd166",
+    specialty:"Brand Identity · Regional",
+    logo:"UMA",
+    clients:["D&Department","HOTEL SHE","Expo 2025"]
+  },
+  {
+    name:"Nosigner", location:"Tokyo / Yokohama", region:"jp",
+    url:"https://nosigner.com", rank:"JP #5", bg:"#111", color:"#5bffa8",
+    specialty:"Social Design · Brand",
+    logo:"NOSIGNER",
+    clients:["Olympic Torch","WHO","Olive Project"]
+  },
+  {
+    name:"Draft Co.", location:"Tokyo", region:"jp",
+    url:"https://draft.co.jp", rank:"JP #6", bg:"#0d0d0d", color:"#d4d4d4",
+    specialty:"Brand Identity · Packaging",
+    logo:"DRAFT",
+    clients:["Tsutaya","Hive Tokyo","Tenoha"]
+  },
+  {
+    name:"tha ltd.", location:"Tokyo", region:"jp",
+    url:"https://tha.jp", rank:"JP #7", bg:"#0f0f0f", color:"#80c8ff",
+    specialty:"Digital Brand · Interactive",
+    logo:"tha",
+    clients:["Toyota","Uniqlo","Sony"]
+  },
+  {
+    name:"Good Design Company", location:"Tokyo", region:"jp",
+    url:"https://www.gooddesigncompany.com", rank:"JP #8", bg:"#0a0a0a", color:"#f5c842",
+    specialty:"Brand Identity · Retail",
+    logo:"GDC",
+    clients:["DEAN & DELUCA","Kamawanu","Takashimaya"]
+  },
+  {
+    name:"Taku Satoh Design Office", location:"Tokyo", region:"jp",
+    url:"https://www.tsdo.jp", rank:"JP #9", bg:"#111", color:"#e8e8e8",
+    specialty:"Brand · Packaging · Exhibit",
+    logo:"TSDO",
+    clients:["Meiji","PLEATS PLEASE","Lotte"]
+  },
+  {
+    name:"Kashiwa Sato Studio", location:"Tokyo", region:"jp",
+    url:"https://kashiwasato.com", rank:"JP #10", bg:"#0d0d0d", color:"#ff4e50",
+    specialty:"Brand Identity · Art Direction",
+    logo:"Kashiwa\nSato",
+    clients:["Rakuten","Lexus","Uniqlo"]
+  },
+  {
+    name:"Six Inc.", location:"Tokyo", region:"jp",
+    url:"https://six-inc.co.jp", rank:"JP #11", bg:"#0f0f0f", color:"#9effba",
+    specialty:"Brand · Editorial · Digital",
+    logo:"SIX",
+    clients:["Shiseido","Panasonic","Nissan"]
+  },
+  {
+    name:"D&Department", location:"Tokyo / Osaka / Seoul", region:"jp",
+    url:"https://www.d-department.com", rank:"JP #12", bg:"#0a0a0a", color:"#c8b8ff",
+    specialty:"Long Life Design · Brand",
+    logo:"D&D",
+    clients:["d47","Japanese Craft","Long Life Design"]
+  },
+  {
+    name:"WOW Inc.", location:"Tokyo / Sendai", region:"jp",
+    url:"https://www.wow.co.jp", rank:"JP #13", bg:"#111", color:"#64d8ff",
+    specialty:"Motion · Brand Experience",
+    logo:"WOW",
+    clients:["Sony","Toshiba","Toyota"]
+  },
+  {
+    name:"Simplicity Co.", location:"Tokyo", region:"jp",
+    url:"https://simplicity.co.jp", rank:"JP #14", bg:"#0d0d0d", color:"#e8e8e8",
+    specialty:"Brand Identity · Retail Design",
+    logo:"SIMPLICITY",
+    clients:["BEAMS","United Arrows","Tasaki"]
+  },
+  {
+    name:"Enlightenment", location:"Tokyo", region:"jp",
+    url:"https://enlightenment.jp", rank:"JP #15", bg:"#0f0f0f", color:"#ffb347",
+    specialty:"Brand Identity · Print",
+    logo:"Enlighten\nment",
+    clients:["Minä Perhonen","Freitag","Arts & Science"]
+  },
+  {
+    name:"10 Inc.", location:"Tokyo", region:"jp",
+    url:"https://www.10-inc.jp", rank:"JP #16", bg:"#0a0a0a", color:"#ff6fa8",
+    specialty:"Brand · Space · Communication",
+    logo:"10 Inc.",
+    clients:["Starbucks Japan","Wired Japan","FamilyMart"]
+  },
+  {
+    name:"Dentsu Design Tank", location:"Tokyo", region:"jp",
+    url:"https://www.dentsu.co.jp", rank:"JP #17", bg:"#111", color:"#f5c542",
+    specialty:"Brand Communication · Campaign",
+    logo:"DENTSU",
+    clients:["Toyota","Panasonic","NTT"]
+  },
+  {
+    name:"Nagai Kaoru Design", location:"Tokyo", region:"jp",
+    url:"https://www.ndc.co.jp", rank:"JP #18", bg:"#0d0d0d", color:"#d4f4a8",
+    specialty:"Poster · Brand Identity",
+    logo:"Nagai\nKaoru",
+    clients:["Parco","Seibu","Hanae Mori"]
+  },
+  {
+    name:"Siftee", location:"Tokyo", region:"jp",
+    url:"https://siftee.jp", rank:"JP #19", bg:"#0f0f0f", color:"#adf7ff",
+    specialty:"Brand · UI/UX · Digital",
+    logo:"SIFTEE",
+    clients:["SoftBank","au","NTT Docomo"]
+  },
+  {
+    name:"Flame Inc.", location:"Tokyo", region:"jp",
+    url:"https://flame-inc.jp", rank:"JP #20", bg:"#0a0a0a", color:"#ff7043",
+    specialty:"Brand Identity · Packaging",
+    logo:"FLAME",
+    clients:["Asahi","Suntory","Kirin"]
+  },
+];
+
+const grid = document.getElementById('grid');
+const searchInput = document.getElementById('searchInput');
+const countLabel = document.getElementById('countLabel');
+const emptyState = document.getElementById('emptyState');
+const chips = document.querySelectorAll('.chip');
+const favCount = document.getElementById('favCount');
+
+let activeFilter = 'all';
+let favorites = new Set(JSON.parse(localStorage.getItem('favAgencies') || '[]'));
+
+function saveFavs() {
+  localStorage.setItem('favAgencies', JSON.stringify([...favorites]));
+  updateFavCount();
+}
+
+function updateFavCount() {
+  const n = favorites.size;
+  favCount.textContent = n > 0 ? n : '';
+}
+
+function buildCards() {
+  agencies.forEach(a => {
+    const link = document.createElement('a');
+    link.className = 'card';
+    link.href = a.url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.dataset.region = a.region;
+    link.dataset.name = a.name.toLowerCase();
+    link.dataset.agencyName = a.name;
+
+    const logoHTML = a.logo.split('\n').join('<br>');
+    const clientTags = a.clients.map(c => `<span class="client-tag">${c}</span>`).join('');
+
+    link.innerHTML = `
+      <div class="card-thumb" style="background:${a.bg}">
+        <button class="like-btn${favorites.has(a.name) ? ' liked' : ''}" data-name="${a.name}" aria-label="즐겨찾기">
+          <svg class="heart-outline" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <svg class="heart-fill" viewBox="0 0 24 24" fill="#ff2d55" stroke="#ff2d55" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+        <div class="logo-text" style="color:${a.color}">${logoHTML}</div>
+        <span class="visit-btn">↗ Visit</span>
+        <div class="clients-bar">${clientTags}</div>
+      </div>
+      <div class="card-info">
+        <div>
+          <div class="card-name">${a.name}</div>
+          <div class="card-meta">${a.location} · ${a.specialty}</div>
+        </div>
+        <span class="card-rank">${a.rank}</span>
+      </div>`;
+
+    // like button — stop propagation so card link doesn't fire
+    link.querySelector('.like-btn').addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const btn = e.currentTarget;
+      const name = btn.dataset.name;
+      if (favorites.has(name)) {
+        favorites.delete(name);
+        btn.classList.remove('liked');
+        // pop animation
+        btn.animate([{transform:'scale(1)'},{transform:'scale(0.8)'},{transform:'scale(1)'}], {duration:200});
+      } else {
+        favorites.add(name);
+        btn.classList.add('liked');
+        btn.animate([{transform:'scale(1)'},{transform:'scale(1.4)'},{transform:'scale(1)'}], {duration:260, easing:'ease-out'});
+      }
+      saveFavs();
+      if (activeFilter === 'fav') applyFilters();
+    });
+
+    grid.appendChild(link);
+  });
+
+  updateFavCount();
+  updateCount();
+}
+
+function updateCount() {
+  const visible = grid.querySelectorAll('.card:not(.hidden)').length;
+  countLabel.textContent = `${visible} agencies`;
+  emptyState.classList.toggle('show', visible === 0);
+}
+
+function applyFilters() {
+  const q = searchInput.value.toLowerCase().trim();
+  grid.querySelectorAll('.card').forEach(card => {
+    let matchRegion;
+    if (activeFilter === 'all') matchRegion = true;
+    else if (activeFilter === 'fav') matchRegion = favorites.has(card.dataset.agencyName);
+    else matchRegion = card.dataset.region === activeFilter;
+    const matchSearch = !q || card.dataset.name.includes(q);
+    card.classList.toggle('hidden', !(matchRegion && matchSearch));
+  });
+  updateCount();
+}
+
+chips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    chips.forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeFilter = chip.dataset.filter;
+    applyFilters();
+  });
+});
+
+searchInput.addEventListener('input', applyFilters);
+buildCards();
+</script>
+</body>
+</html>
