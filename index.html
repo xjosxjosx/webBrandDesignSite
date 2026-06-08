@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Global Brand Design Agencies</title>
+  <title>B.INDEX</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -275,14 +275,14 @@
 <body>
 
 <header>
-  <div class="site-title">Brand Design Agencies</div>
+  <div class="site-title">B.INDEX</div>
   <div class="header-right">
     <span class="agency-count" id="countLabel"></span>
     <div class="search-wrap">
       <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
       </svg>
-      <input type="text" id="searchInput" placeholder="Search agencies…" />
+      <input type="text" id="searchInput" placeholder="Search…" />
     </div>
   </div>
 </header>
@@ -966,7 +966,7 @@ function buildCards() {
 
 function updateCount() {
   const visible = grid.querySelectorAll('.card:not(.hidden)').length;
-  countLabel.textContent = `${visible} agencies`;
+  countLabel.textContent = `${visible}`;
   emptyState.classList.toggle('show', visible === 0);
 }
 
