@@ -157,47 +157,6 @@
     }
     .card:hover .logo-text { transform: scale(1.05); }
 
-    /* ── PORTFOLIO GRID ── */
-    .portfolio-grid {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-      opacity: 0;
-      transform: scale(1.04);
-      transition: opacity 0.28s ease, transform 0.28s ease;
-      z-index: 1;
-      overflow: hidden;
-    }
-    .card:hover .portfolio-grid {
-      opacity: 1;
-      transform: scale(1);
-    }
-    .card:hover .logo-text {
-      opacity: 0;
-      transform: scale(0.92);
-    }
-    .portfolio-grid img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.4s ease;
-    }
-    .portfolio-grid img:hover {
-      transform: scale(1.08);
-      z-index: 2;
-    }
-    /* dim overlay on grid so clients-bar stays readable */
-    .portfolio-grid::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
     /* like button */
     .like-btn {
       position: absolute;
@@ -956,12 +915,6 @@ function buildCards() {
     const logoHTML = a.logo.split('\n').join('<br>');
     const clientTags = a.clients.map(c => `<span class="client-tag">${c}</span>`).join('');
 
-    // 에이전시명 기반 시드로 9장의 일관된 이미지 생성
-    const seed = encodeURIComponent(a.name.replace(/\s+/g,'').toLowerCase());
-    const imgs = Array.from({length:9}, (_,i) =>
-      `<img src="https://picsum.photos/seed/${seed}${i+1}/200/150" alt="" loading="lazy">`
-    ).join('');
-
     link.innerHTML = `
       <div class="card-thumb" style="background:${a.bg}">
         <button class="like-btn${favorites.has(a.name) ? ' liked' : ''}" data-name="${a.name}" aria-label="즐겨찾기">
@@ -972,8 +925,7 @@ function buildCards() {
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
           </svg>
         </button>
-        <div class="portfolio-grid">${imgs}</div>
-        <div class="logo-text" style="color:${a.color};transition:opacity 0.2s ease,transform 0.25s ease;position:relative;z-index:2">${logoHTML}</div>
+        <div class="logo-text" style="color:${a.color}">${logoHTML}</div>
         <span class="visit-btn">↗ Visit</span>
         <div class="clients-bar">${clientTags}</div>
       </div>
